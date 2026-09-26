@@ -20,7 +20,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1100px;
             margin: auto;
             padding: 20px;
         }
@@ -38,16 +38,17 @@
             color: #666;
         }
 
-        .upload-box {
+        .upload-box,
+        .calculator-box {
             background: white;
             border-radius: 15px;
             padding: 25px;
-            text-align: center;
+            margin-bottom: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
-        .upload-box h2 {
-            margin-top: 0;
+        .upload-box {
+            text-align: center;
         }
 
         .upload-button {
@@ -67,23 +68,96 @@
 
         #preview {
             width: 100%;
+            max-height: 500px;
+            object-fit: contain;
             margin-top: 20px;
             border-radius: 10px;
             display: none;
         }
 
-        .process-button {
+        .discount-box {
+            margin-bottom: 20px;
+        }
+
+        .discount-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        #discount {
+            width: 150px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
             width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+        }
+
+        td input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .number-cell {
+            background: #f8fafc;
+            font-weight: bold;
+        }
+
+        .button-row {
             margin-top: 20px;
-            padding: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-button {
             background: #16a34a;
             color: white;
+        }
+
+        .remove-button {
+            background: #dc2626;
+            color: white;
+        }
+
+        .process-button {
+            background: #7c3aed;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
             font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
         }
 
         .footer {
@@ -91,6 +165,21 @@
             margin-top: 30px;
             color: #888;
             font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .upload-box,
+            .calculator-box {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -101,14 +190,16 @@
 
     <div class="header">
         <h1>Invoice Price Calculator</h1>
-        <p>Upload your purchase invoice to begin</p>
+        <p>Upload your purchase invoice and calculate selling prices</p>
     </div>
+
+    <!-- IMAGE UPLOAD -->
 
     <div class="upload-box">
 
         <h2>Upload Invoice</h2>
 
-        <p>Select an invoice image from your phone.</p>
+        <p>Select an invoice image from your device.</p>
 
         <label for="invoiceImage" class="upload-button">
             📷 Choose Invoice Image
@@ -130,17 +221,145 @@
 
     </div>
 
+
+    <!-- CALCULATOR -->
+
+    <div class="calculator-box">
+
+        <h2>Price Calculator</h2>
+
+        <!-- COMMON DISCOUNT -->
+
+        <div class="discount-box">
+
+            <label for="discount">
+                Discount for all products (%)
+            </label>
+
+            <input
+                type="number"
+                id="discount"
+                value="0"
+                min="0"
+                max="100"
+                step="0.01"
+                placeholder="Enter discount %"
+            >
+
+        </div>
+
+
+        <!-- PRODUCT TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Price Before GST</th>
+                        <th>Purchase Price</th>
+                        <th>MRP</th>
+                        <th>Discounted Price</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="productTable">
+
+                    <tr>
+
+                        <td>
+                            <input
+                                type="text"
+                                placeholder="Product name"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                type="number"
+                                class="quantity"
+                                value="1"
+                                min="0"
+                                step="1"
+                            >
+                        </td>
+
+                        <td>
+                            <input
+                                type="number"
+                                class="beforeGST"
+                                value="0"
+                                min="0"
+                                step="0.01"
+                            >
+                        </td>
+
+                        <td class="purchasePrice number-cell">
+                            ₹0.00
+                        </td>
+
+                        <td class="mrp number-cell">
+                            ₹0.00
+                        </td>
+
+                        <td class="discountedPrice number-cell">
+                            ₹0.00
+                        </td>
+
+                        <td>
+                            <button
+                                class="remove-button"
+                                onclick="removeRow(this)">
+                                Remove
+                            </button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="button-row">
+
+            <button
+                class="add-button"
+                onclick="addRow()">
+                + Add Product
+            </button>
+
+        </div>
+
+    </div>
+
+
     <div class="footer">
         Invoice Price Calculator
     </div>
 
 </div>
 
+
 <script>
 
-    const invoiceImage = document.getElementById("invoiceImage");
-    const preview = document.getElementById("preview");
-    const processButton = document.getElementById("processButton");
+    // IMAGE PREVIEW
+
+    const invoiceImage =
+        document.getElementById("invoiceImage");
+
+    const preview =
+        document.getElementById("preview");
 
     invoiceImage.addEventListener("change", function () {
 
@@ -148,21 +367,203 @@
 
         if (file) {
 
-            const imageURL = URL.createObjectURL(file);
+            const imageURL =
+                URL.createObjectURL(file);
 
             preview.src = imageURL;
-            preview.style.display = "block";
 
-            processButton.style.display = "block";
+            preview.style.display = "block";
         }
 
     });
 
-    processButton.addEventListener("click", function () {
 
-        alert("Invoice processing will be added next.");
+    // DISCOUNT FIELD
+
+    const discount =
+        document.getElementById("discount");
+
+    discount.addEventListener("input", function () {
+
+        calculateAllRows();
 
     });
+
+
+    // ADD PRODUCT ROW
+
+    function addRow() {
+
+        const table =
+            document.getElementById("productTable");
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>
+                <input
+                    type="text"
+                    placeholder="Product name"
+                >
+            </td>
+
+            <td>
+                <input
+                    type="number"
+                    class="quantity"
+                    value="1"
+                    min="0"
+                    step="1"
+                >
+            </td>
+
+            <td>
+                <input
+                    type="number"
+                    class="beforeGST"
+                    value="0"
+                    min="0"
+                    step="0.01"
+                >
+            </td>
+
+            <td class="purchasePrice number-cell">
+                ₹0.00
+            </td>
+
+            <td class="mrp number-cell">
+                ₹0.00
+            </td>
+
+            <td class="discountedPrice number-cell">
+                ₹0.00
+            </td>
+
+            <td>
+                <button
+                    class="remove-button"
+                    onclick="removeRow(this)">
+                    Remove
+                </button>
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+        attachRowEvents(row);
+
+    }
+
+
+    // REMOVE PRODUCT ROW
+
+    function removeRow(button) {
+
+        const row =
+            button.closest("tr");
+
+        row.remove();
+
+    }
+
+
+    // CALCULATE ONE ROW
+
+    function calculateRow(row) {
+
+        const beforeGST =
+            parseFloat(
+                row.querySelector(".beforeGST").value
+            ) || 0;
+
+        const discountValue =
+            parseFloat(discount.value) || 0;
+
+
+        // Add 5% GST
+
+        const purchasePrice =
+            beforeGST * 1.05;
+
+
+        // MRP = Purchase Price × 2
+
+        const mrp =
+            purchasePrice * 2;
+
+
+        // Apply common discount
+
+        const discountedPrice =
+            mrp -
+            (mrp * discountValue / 100);
+
+
+        row.querySelector(".purchasePrice")
+            .textContent =
+            "₹" + purchasePrice.toFixed(2);
+
+
+        row.querySelector(".mrp")
+            .textContent =
+            "₹" + mrp.toFixed(2);
+
+
+        row.querySelector(".discountedPrice")
+            .textContent =
+            "₹" + discountedPrice.toFixed(2);
+
+    }
+
+
+    // CALCULATE ALL ROWS
+
+    function calculateAllRows() {
+
+        const rows =
+            document.querySelectorAll(
+                "#productTable tr"
+            );
+
+        rows.forEach(function(row) {
+
+            calculateRow(row);
+
+        });
+
+    }
+
+
+    // INPUT EVENTS
+
+    function attachRowEvents(row) {
+
+        const beforeGST =
+            row.querySelector(".beforeGST");
+
+        beforeGST.addEventListener(
+            "input",
+            function() {
+
+                calculateRow(row);
+
+            }
+        );
+
+    }
+
+
+    // INITIAL ROW
+
+    const firstRow =
+        document.querySelector(
+            "#productTable tr"
+        );
+
+    attachRowEvents(firstRow);
 
 </script>
 
