@@ -1,17 +1,171 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Invoice Price Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            color: #222;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .upload-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .upload-box h2 {
+            margin-top: 0;
+        }
+
+        .upload-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 14px 22px;
+            background: #2563eb;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        #preview {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .process-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #888;
+            font-size: 13px;
+        }
+    </style>
 </head>
 
 <body>
 
-    <h1>Invoice Price Calculator</h1>
+<div class="container">
 
-    <p>Upload your purchase invoice image</p>
+    <div class="header">
+        <h1>Invoice Price Calculator</h1>
+        <p>Upload your purchase invoice to begin</p>
+    </div>
 
-    <input type="file" accept="image/*">
+    <div class="upload-box">
+
+        <h2>Upload Invoice</h2>
+
+        <p>Select an invoice image from your phone.</p>
+
+        <label for="invoiceImage" class="upload-button">
+            📷 Choose Invoice Image
+        </label>
+
+        <input
+            type="file"
+            id="invoiceImage"
+            accept="image/*"
+        >
+
+        <img id="preview" alt="Invoice Preview">
+
+        <button
+            id="processButton"
+            class="process-button">
+            Process Invoice
+        </button>
+
+    </div>
+
+    <div class="footer">
+        Invoice Price Calculator
+    </div>
+
+</div>
+
+<script>
+
+    const invoiceImage = document.getElementById("invoiceImage");
+    const preview = document.getElementById("preview");
+    const processButton = document.getElementById("processButton");
+
+    invoiceImage.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+
+            const imageURL = URL.createObjectURL(file);
+
+            preview.src = imageURL;
+            preview.style.display = "block";
+
+            processButton.style.display = "block";
+        }
+
+    });
+
+    processButton.addEventListener("click", function () {
+
+        alert("Invoice processing will be added next.");
+
+    });
+
+</script>
 
 </body>
+
 </html>
